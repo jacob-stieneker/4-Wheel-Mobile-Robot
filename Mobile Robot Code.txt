@@ -1,0 +1,66 @@
+#include <Servo.h>
+
+Servo Servo1;
+int dcleft=10;
+int dcright=11;
+int tPin=5;
+int ePin=7;
+int servoPin=6;
+int pirPin=8;
+int rPin=9;
+float duration;
+float distance;
+
+void setup(){
+  Servo1.attach(servoPin);
+  Serial.begin(9600);
+  pinMode(5, OUTPUT);
+  pinMode(7, INPUT);
+  pinMode(8, INPUT);
+  pinMode(9, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+}
+
+void loop(){
+  Servo1.write(0);
+  if(digitalRead(pirPin)==HIGH){
+    digitalWrite(9, HIGH);
+    delay(70);
+    digitalWrite(9, LOW);
+    delay(2000);
+  }
+  if(digitalRead(pirPin)==HIGH){
+    digitalWrite(rPin, HIGH);
+    delay(70);
+    digitalWrite(rPin, LOW);
+    delay(2000);
+  }
+  digitalWrite(tPin, LOW);
+  delay(500);
+  digitalWrite(tPin, HIGH);
+  delay(1000);
+  digitalWrite(tPin, LOW);
+  duration=pulseIn(ePin, HIGH);
+  distance= duration/29/2;
+  delay(50);
+  Serial.println(distance);
+  
+  if(distance<=50){
+    analogWrite(dcleft, 0);
+    analogWrite(dcright, 0);
+    Servo1.write(0);
+    delay(00);
+    Servo1.write(90);
+    delay(2000);
+    Servo1.write(0);
+    analogWrite(dcleft, 200);
+    analogWrite(dcright, 200);
+  }
+    if(distance>=51){
+    analogWrite(dcleft, 255);
+    analogWrite(dcright, 255);
+    Servo1.write(0);
+  }
+}
